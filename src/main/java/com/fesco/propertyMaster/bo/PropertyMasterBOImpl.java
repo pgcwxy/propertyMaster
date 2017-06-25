@@ -19,7 +19,6 @@ import java.util.Properties;
 /**
  * @date 10:04 2017/6/15
  * @author 王新宇
- *
  */
 public class PropertyMasterBOImpl implements IPropertyMasterBO {
 	Logger logger = Logger.getLogger(PropertyMasterBOImpl.class);
