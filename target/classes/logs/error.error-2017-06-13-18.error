@@ -1,7 +1,0 @@
-2017-06-13 18:00:07,184 - 在jar包同级目录没有找到config文件夹中的config.properties文件，或者文件正在被占用不可读写
-java.io.FileNotFoundException: C:\Users\Administrator\Desktop\sinosoft\技术专家组\数据库配置文件\propertyMaster\target\classes\config\config.properties (系统找不到指定的文件。)
-	at java.io.FileInputStream.open(Native Method)
-	at java.io.FileInputStream.<init>(FileInputStream.java:146)
-	at java.io.FileInputStream.<init>(FileInputStream.java:101)
-	at com.fesco.propertyMaster.utils.PropertyUtils.<clinit>(PropertyUtils.java:18)
-	at com.fesco.propertyMaster.domain.PropertyMaster.main(PropertyMaster.java:66)
