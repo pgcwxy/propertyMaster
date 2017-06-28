@@ -173,22 +173,34 @@ public class PropertyMaster {
 			//循环调用bo
 			Iterator<Map.Entry<Environment, PropertyUnit>> iterator = propertyUnitMap.entrySet().iterator();
 			while (iterator.hasNext()){
-				Map.Entry<Environment, PropertyUnit> entry = iterator.next();
-				//切换数据源
-				CustomerContextHolder.setDateSourceType(entry.getKey());
-				ConsoleUtils.println("切换数据源到"+entry.getKey()+"环境");
-
-				propertyMasterBO.insertNewConfig(propertyMasterBO.getInsertConfigs(entry.getValue()));
-				propertyMasterBO.deleteConfig(propertyMasterBO.getDeleteConfigs(entry.getValue()));
-				propertyMasterBO.updateConfig(propertyMasterBO.getUpdateConfigs(entry.getValue()));
-				ConsoleUtils.println("开始更新"+entry.getKey()+"环境应用内部配置缓存");
-				httpInvokeMis(entry.getKey());
+				invokeBO(propertyMasterBO, iterator);
 			}
 			ConsoleUtils.println("执行完毕，欢迎再次使用本软件！");
 		}catch (Exception e){
 			logger.error("运行出错",e);
 			throw new RuntimeException("运行出错",e);
 		}
+	}
+
+	private static void invokeBO(IPropertyMasterBO propertyMasterBO, Iterator<Map.Entry<Environment, PropertyUnit>> iterator) {
+		try {
+			Map.Entry<Environment, PropertyUnit> entry = iterator.next();
+			//切换数据源
+			CustomerContextHolder.setDateSourceType(entry.getKey());
+			ConsoleUtils.println("切换数据源到"+entry.getKey()+"环境");
+
+			propertyMasterBO.insertNewConfig(propertyMasterBO.getInsertConfigs(entry.getValue()));
+			propertyMasterBO.deleteConfig(propertyMasterBO.getDeleteConfigs(entry.getValue()));
+			propertyMasterBO.updateConfig(propertyMasterBO.getUpdateConfigs(entry.getValue()));
+			ConsoleUtils.println("开始更新"+entry.getKey()+"环境应用内部配置缓存");
+			httpInvokeMis(entry.getKey());
+		}catch (Exception e){
+			//将异常正常返回，可以保证不会因为前面的异常导致后面的内容不可执行
+			ConsoleUtils.println("上述环境执行失败，请检查日志error.error");
+			logger.error(e);
+			return;
+		}
+
 	}
 
 	private static void httpInvokeMis(Environment environment) {
