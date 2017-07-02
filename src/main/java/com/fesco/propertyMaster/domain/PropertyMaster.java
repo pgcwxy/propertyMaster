@@ -204,6 +204,13 @@ public class PropertyMaster {
 	}
 
 	private static void httpInvokeMis(Environment environment) {
+		String userName = PropertyUtils.getValue("app.login.userName." + environment);
+		String userPassword = PropertyUtils.getValue("app.login.userPassword." + environment);
+		if(userName==null||"".equals(userName)||userPassword==null||"".equals(userPassword)){
+			ConsoleUtils.println(environment+"环境缺少模拟登陆用户名或者密码");
+			logger.error(environment+"环境缺少模拟登陆用户名或者密码");
+			return;
+		}
 		try {
 			String loginUrl = PropertyUtils.getValue("app.login.URL." + environment);
 			String refreshConfigCacheUrl = PropertyUtils.getValue("app.refreshConfigCache.URL." + environment);
@@ -211,8 +218,8 @@ public class PropertyMaster {
 				String url = loginUrl;
 				HttpPost httpPost = new HttpPost(url);
 				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-				nvps.add(new BasicNameValuePair("user.loginName", "fesco"));
-				nvps.add(new BasicNameValuePair("user.password", "78e4a3c34ae6feac093ae13cb75a25f3"));
+				nvps.add(new BasicNameValuePair("user.loginName", userName));
+				nvps.add(new BasicNameValuePair("user.password", userPassword));
 				nvps.add(new BasicNameValuePair("passError", "0"));
 				httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 				ConsoleUtils.println("调用"+environment+"环境mis应用Http地址："+url+"，模拟登陆");
