@@ -25,6 +25,10 @@ public class PropertyUtils {
 	}
 	public static String getValue(String key){
 		String value = properties.getProperty(key);
+		if(value==null){
+			logger.info("从配置文件中获取配置，key="+key+"，但是没有找到");
+			return null;
+		}
 		logger.info("从配置文件中获取配置，key="+key+"，value="+value);
 		return value.trim();
 	}
